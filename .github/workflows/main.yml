@@ -1,7 +1,4 @@
-name: Build image and push to Artifact Registry of GCP using runner ID
-
-env:
-  SERVICE_NAME: cvp-client-apiservices
+name: CI
 
 on:
   push:
@@ -30,51 +27,19 @@ on:
         default: 'false'
         type: boolean
 
-jobs:
-  CI:
-    runs-on: ubuntu-latest
+ jobs:
+   build:
+     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.inputs.branch }}
+     steps:
+       - name: Get Your Code
+         uses: actions/checkout@v2
 
-      - name: Google Cloud Auth
-        uses: "google-github-actions/auth@v2"
-        with:
-          credentials_json: "${{ secrets.GCP_SA_KEY }}"
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-
-      - name: Set up Cloud SDK
-        uses: "google-github-actions/setup-gcloud@v2"
-
-      - name: Configure Docker
-        run: |
-          gcloud auth configure-docker --quiet
-          gcloud auth configure-docker ${{ github.event.inputs.region }}-docker.pkg.dev --quiet
-
-      - name: Get runner ID
-        id: get_runner_id
-        run: |
-          RUNNER_ID=$(echo "${{ runner.name }}" | sed 's/[^0-9]*//g')
-          echo "Runner ID: ${RUNNER_ID}"
-          echo "::set-output name=RUNNER_ID::${RUNNER_ID}"
-
-      # - name: Ask for confirmation to push to artifact repository
-      #   id: confirm_push
-      #   run: |
-      #     echo "Do you want to push the Docker image to the artifact repository? (y/n)"
-      #     read push_image
-      #     if [ "$push_image"!= "y" ]; then
-      #       echo "Cancelling push to artifact repository"
-      #       exit 1
-      #     fi
-
-
-      - name: Build and Push Docker Image
+      - name: Say Hello to the World
         # if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
         if: (github.event.name == 'push' && github.base_branch == 'main') || github.event.inputs.push_image == 'true'
         run: |
-          docker build -t ${{ github.event.inputs.region }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cvp-client-apiservices/cvp-client-apiservices:EAP-1.0.0-${{ steps.get_runner_id.outputs.RUNNER_ID }} .
-          docker push ${{ github.event.inputs.region }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cvp-client-apiservices/cvp-client-apiservices:EAP-1.0.0-${{ steps.get_runner_id.outputs.RUNNER_ID }}
+          echo "Hello, World!"
+
+      #  - name: Say Hello to the World
+      #    run: echo "Hello, World!"
