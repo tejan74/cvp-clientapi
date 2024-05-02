@@ -26,14 +26,14 @@ on:
         required: false
         default: 'false'
         type: boolean
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
- jobs:
-   build:
-     runs-on: ubuntu-latest
-
-     steps:
-       - name: Get Your Code
-         uses: actions/checkout@v2
+    steps:
+      - name: Get Your Code
+        uses: actions/checkout@v2
 
       - name: Say Hello to the World
         # if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
