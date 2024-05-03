@@ -9,21 +9,9 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      branch:
-        # description: 'The branch to checkout and build'
-        # required: true
-      region:
-        description: 'The region to deploy to'
-        required: true
-        default: 'asia-south1'
-        type: choice
-        options:
-          - us-central1
-          - asia-south1
-          - europe-west1
       push_image:
         description: 'Build image and push to container registry'
-        required: false
+        required: true
         default: 'false'
         type: boolean
         
@@ -34,13 +22,21 @@ jobs:
     steps:
       - name: Get Your Code
         uses: actions/checkout@v2
- 
-      - name: Say Hello to the World
-        if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
-        # if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
-        # if: (github.event.name == 'push' && github.base_branch == 'main') || github.event.inputs.push_image == 'true'
+
+      - name: Get runner ID
+        if: (github.event.name == 'push' && github.base_branch == 'main') || github.event.inputs.push_image == 'true'
+        id: runner_id
         run: |
-          echo "Hello, World!!!!"
+          RUNNER_ID=$(echo "${{ runner.name }}" | sed 's/[^0-9]*//g')
+          echo "Runner ID: ${RUNNER_ID}"
+          echo "::set-output name=RUNNER_ID::${RUNNER_ID}"
+          
+      - name: Say Hello to the World
+        # if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        # if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        if: (github.event.name == 'push' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        run: |
+          echo "Hello, World!"
 
       #  - name: Say Hello to the World
       #    run: echo "Hello, World!"
