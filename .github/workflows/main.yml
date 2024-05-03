@@ -33,7 +33,7 @@ jobs:
           
       - name: Say Hello to the World
         # if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
-        # if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
-        if: (github.event.name == 'push' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        # if: (github.event.name == 'push' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
         run: |
           echo "Hello, World!!"
