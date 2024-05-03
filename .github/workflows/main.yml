@@ -11,7 +11,7 @@ on:
     inputs:
       push_image:
         description: 'Build image and push to container registry'
-        required: false
+        required: true
         default: 'false'
         type: boolean
         
@@ -25,7 +25,7 @@ jobs:
 
       - name: Get runner ID
         # if: (github.event.name == 'push' && github.base_branch == 'main') || github.event.inputs.push_image == 'true'
-        if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        # if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
         id: runner_id
         run: |
           RUNNER_ID=$(echo "${{ runner.name }}" | sed 's/[^0-9]*//g')
@@ -34,8 +34,8 @@ jobs:
           
       - name: Say Hello to the World
         # if: (github.event_name == 'pull_request' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
-        if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
-        # if: (github.event.name == 'push' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        # if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
+        if: (github.event.name == 'push' && github.base_ref == 'main') || github.event.inputs.push_image == 'true'
         run: |
           echo "Hello, World!!"
 
