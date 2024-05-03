@@ -11,8 +11,8 @@ on:
     inputs:
       push_image:
         description: 'Build image and push to container registry'
-        required: false
-        default: 'false'
+        required: true
+        default: 'true'
         type: boolean
         
 jobs:
