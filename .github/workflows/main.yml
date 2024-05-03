@@ -1,12 +1,12 @@
 name: CI
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       push_image:
@@ -15,7 +15,7 @@ on:
         default: 'true'
         type: boolean
         
-jobs:
+jobs: 
   build:
     runs-on: ubuntu-latest
 
